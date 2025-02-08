@@ -24,9 +24,9 @@ router.get(
   getDepartments
 );
 
-// Get departments by Super & Admin with pagination and filters
+// Update departments by Super & Admin
 router.put(
-  "/:id",
+  "/edit/:id",
   verifyToken,
   allowedRoles("SuperAdmin", "Admin"),
   updateDepartment
