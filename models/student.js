@@ -8,43 +8,19 @@ const studentSchema = new mongoose.Schema({
   department: { type: mongoose.Schema.Types.ObjectId, ref: "Department" }, // Reference to Department
   courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }], // Reference to the Course and get list
   subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Subject" }], // Reference to the Subject and get list
-  classes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Classes" }], // // // Reference to the Classes and get list
-  attendance: [
+  classes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class" }], // // // Reference to the Classes and get list
+  attendance: [{ type: mongoose.Schema.Types.ObjectId, ref: "Attendance" }], // Link Attendance Records
+  notifications: [
     {
-      class: { type: mongoose.Schema.Types.ObjectId, ref: "Classes" }, // Reference to the class
-      totalClasses: { type: Number, default: 0 },
-      attendedClasses: { type: Number, default: 0 },
+      title: String,
+      message: String,
+      read: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now },
     },
   ],
-
-  updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Admin" }, // Reference to the Admin
+  assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assignment" }],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
-
-// Hash password before saving
-studentSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
-
-// Pre-findOneAndUpdate middleware (works with update methods)
-studentSchema.pre("findOneAndUpdate", async function (next) {
-  const update = this.getUpdate();
-
-  if (update.password) {
-    const salt = await bcrypt.genSalt(10);
-    update.password = await bcrypt.hash(update.password, salt);
-  }
-
-  next();
-});
-
-// Compare hashed passwords
-studentSchema.methods.comparePassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
-};
 
 module.exports = mongoose.model("Student", studentSchema);

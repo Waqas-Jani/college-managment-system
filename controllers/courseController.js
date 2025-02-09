@@ -40,13 +40,8 @@ const getCourses = async (req, res, next) => {
 
 // create course
 const postCourse = async (req, res, next) => {
-  const { name, code } = req.body;
-
   try {
-    const { error } = courseSchema.validate({
-      name,
-      code,
-    });
+    const { error } = courseSchema.validate(req.body);
     if (error) {
       return res
         .status(400)

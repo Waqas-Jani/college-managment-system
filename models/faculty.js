@@ -10,7 +10,13 @@ const facultySchema = new mongoose.Schema({
     enum: ["HOD", "Professor", "Non-Teaching"],
     default: "Professor",
   },
+  assignmentsCreated: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Assignment" },
+  ],
   updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Admin" }, // Reference to the Admin
+  attendanceRecords: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Attendance" },
+  ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

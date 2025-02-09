@@ -151,14 +151,15 @@ exports.courseSchema = joi
   .object({
     name: joi.string().required(),
     code: joi.string().required(),
-    updatedBy: joi.string().hex().length(24),
-    faculty: joi.string().hex().length(24),
-    students: joi.array().items(joi.string().hex().length(24)),
+    updatedBy: joi.string().hex().length(24).required(),
+    department: joi.string().hex().length(24),
+    duration: joi.number().required(),
+    subjects: joi.array().items(joi.string().hex().length(24)),
   })
   .options({ abortEarly: false });
 
 //   Using same schema but name and code make optional
 exports.optionalCourseSchema = this.courseSchema.fork(
-  ["name", "code"],
+  ["name", "code", "duration"],
   (schema) => schema.optional()
 );
