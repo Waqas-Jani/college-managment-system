@@ -117,7 +117,7 @@ exports.updatefacultyByAdminSchema = joi
 
 /* =================== Student ====================== */
 
-// Create student
+// Create
 exports.createStudentSchema = joi
   .object({
     name: joi.string().required(),
@@ -128,9 +128,9 @@ exports.createStudentSchema = joi
   })
   .options({ abortEarly: false });
 
-//////////////// ============================ /////////////////////////////////
+//////////////// ===========Deparment================= /////////////////////////////////
 
-// Department create
+// create
 exports.departmentSchema = joi
   .object({
     name: joi.string().required(),
@@ -145,8 +145,8 @@ exports.optionalDepartmentSchema = this.departmentSchema.fork(
   ["name"],
   (schema) => schema.optional()
 );
-
-// Create course
+/* ============================ Course ================================ */
+// Create
 exports.courseSchema = joi
   .object({
     name: joi.string().required(),
@@ -161,5 +161,25 @@ exports.courseSchema = joi
 //   Using same schema but name and code make optional
 exports.optionalCourseSchema = this.courseSchema.fork(
   ["name", "code", "duration"],
+  (schema) => schema.optional()
+);
+
+/* ========================== Subject ================================== */
+
+// Create course
+exports.subjectSchema = joi
+  .object({
+    name: joi.string().required(),
+    code: joi.string().required(),
+    department: joi.string().hex().length(24),
+    attendanceRecords: joi.array().items(joi.string().hex().length(24)),
+    assignments: joi.array().items(joi.string().hex().length(24)),
+    creditHour: joi.number().required(),
+  })
+  .options({ abortEarly: false });
+
+// Using same schema but name and code make optional
+exports.optionalSubjectSchema = this.subjectSchema.fork(
+  ["name", "code", "creditHour"],
   (schema) => schema.optional()
 );

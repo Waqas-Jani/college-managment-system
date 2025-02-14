@@ -43,7 +43,7 @@ const adminVerification = async (data, next) => {
 // Generate JWT Token
 const generateToken = (data) => {
   return jwt.sign(data, process.env.JWT_SECRET_KEY, {
-    expiresIn: "1d",
+    expiresIn: "2d",
   });
 };
 

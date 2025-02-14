@@ -13,6 +13,7 @@ const adminRoutes = require("./routes/v1/admin");
 const depRoutes = require("./routes/v1/department");
 const courseRoutes = require("./routes/v1/course");
 const facultyRoutes = require("./routes/v1/faculty");
+const subjectRoutes = require("./routes/v1/subject");
 
 const app = express();
 const server = http.createServer(app);
@@ -42,14 +43,20 @@ app.use(express.urlencoded({ extended: true })); //Parse URL-encoded bodies
 //cookies parser
 app.use(cookieParser());
 
+// Serve static files (uploaded images or files)
 app.use("/uploads", express.static("uploads"));
 
 // Routes
+
+app.get("/", (req, res) => {
+  res.send("Server is running...");
+});
 
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/department", depRoutes);
 app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/faculty", facultyRoutes);
+app.use("/api/v1/subject", subjectRoutes);
 
 // Error handler
 
