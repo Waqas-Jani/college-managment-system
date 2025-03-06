@@ -19,7 +19,7 @@ router.get("/get/all", function (req, res) {
     })
     .catch((err) =>
       res.status(422).json({
-        message: err.message,
+        message: err.message
       })
     );
 });
@@ -28,16 +28,14 @@ router.post("/add", async function (req, res) {
   try {
     const data = await Department.create({
       name: req.body.name,
-      description: req.body.description,
+      description: req.body.description
     });
 
     res.status(201).json({ message: "Record created" });
   } catch (error) {
     if (error.name === "ValidationError") {
       for (let field in error.errors) {
-        res
-          .status(400)
-          .json({ message: `${field}: ${error.errors[field].message}` });
+        res.status(400).json({ message: `${field}: ${error.errors[field].message}` });
       }
     } else {
       res.status(500).json({ message: "Unexpected error!" });
@@ -52,17 +50,17 @@ router.delete("/delete/:id", async function (req, res) {
     const result = await Department.deleteOne({ _id: req.params.id });
     if (result.deletedCount === 0) {
       res.status(404).json({
-        message: "No document found with the specified id",
+        message: "No document found with the specified id"
       });
     } else {
       res.status(200).json({
-        message: "Department Deleted",
+        message: "Department Deleted"
       });
     }
   } catch (error) {
     console.error("Error deleting document:", error.message);
     res.status(500).json({
-      message: error?.message,
+      message: error?.message
     });
   }
 });
@@ -72,7 +70,7 @@ router.put("/edit/:id", async function (req, res) {
     const record = await Department.findOne({ _id: req.params.id });
     if (!record) {
       return res.status(404).json({
-        message: "No matching department found to update",
+        message: "No matching department found to update"
       });
     }
 
@@ -81,17 +79,13 @@ router.put("/edit/:id", async function (req, res) {
 
     await record.save();
 
-    res
-      .status(200)
-      .json({ message: "Department updated successfully!", data: record });
+    res.status(200).json({ message: "Department updated successfully!", data: record });
   } catch (error) {
     if (error.name === "CastError") {
       res.status(400).json({ message: `Invalid ID format: ${error?.message}` });
     } else if (error.name === "ValidationError") {
       for (let field in error.errors) {
-        res
-          .status(400)
-          .json({ message: `${field}: ${error.errors[field].message}` });
+        res.status(400).json({ message: `${field}: ${error.errors[field].message}` });
       }
     } else {
       res.status(500).json({ message: "Unexpected error!" });

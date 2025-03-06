@@ -18,7 +18,7 @@ router.get("/get/all", function (req, res) {
     })
     .catch((err) =>
       res.status(422).json({
-        message: err.message,
+        message: err.message
       })
     );
 });
@@ -29,15 +29,15 @@ router.post("/add", function (req, res) {
     name: req.body.name,
     department: {
       id: obj.depId,
-      name: obj.name,
-    },
+      name: obj.name
+    }
   });
   Classes.create(newClass, function (err, clas) {
     if (err) throw err;
     res.status(200).json({
       status: 200,
       message: "Class added successfully",
-      data: clas,
+      data: clas
     });
   });
 });
@@ -48,12 +48,12 @@ router.delete("/delete/:id", function (req, res) {
     .exec()
     .then((result) => {
       res.status(200).json({
-        message: "Class Deleted",
+        message: "Class Deleted"
       });
     })
     .catch((err) => {
       res.status(500).json({
-        err,
+        err
       });
     });
 });
@@ -64,7 +64,7 @@ router.put("/edit/:id", function (req, res) {
     if (err) {
       res.status(500).json({
         status: 500,
-        message: "Something went wrong",
+        message: "Something went wrong"
       });
     } else if (dep) {
       var editClass = {
@@ -72,21 +72,21 @@ router.put("/edit/:id", function (req, res) {
         credit_hour: req.body.credit_hour,
         department: {
           id: obj.depId,
-          name: obj.name,
-        },
+          name: obj.name
+        }
       };
       let query = { _id: req.params.id };
       Classes.updateOne(query, editClass, function (err, de) {
         if (err) throw err;
         res.status(200).json({
           status: 200,
-          message: "Department updated successfully",
+          message: "Department updated successfully"
         });
       });
     } else {
       res.status(500).json({
         status: 500,
-        message: "Something went wrong",
+        message: "Something went wrong"
       });
     }
   });

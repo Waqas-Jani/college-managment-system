@@ -41,11 +41,7 @@ const updateCourseById = async (id, data) => {
     }
   }
 
-  const updated = await Course.findByIdAndUpdate(
-    id,
-    { $set: data },
-    { new: true }
-  );
+  const updated = await Course.findByIdAndUpdate(id, { $set: data }, { new: true });
   if (!updated) {
     throw new CustomError(`Record with ID ${id} not found. `, 404);
   }
@@ -65,5 +61,5 @@ module.exports = {
   createCourse,
   findCourses,
   updateCourseById,
-  deleteCourseById,
+  deleteCourseById
 };

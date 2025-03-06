@@ -3,13 +3,13 @@ const {
   updateAdminById,
   deleteAdminById,
   changeAdminPasswordById,
-  updateAdminProfileById,
+  updateAdminProfileById
 } = require("../../services/adminService");
 
 const {
   updateBySuperAdminSchema,
   updatePwdSchema,
-  updateProfileSchema,
+  updateProfileSchema
 } = require("../../utils/validationsSchema");
 
 // get all admins
@@ -30,9 +30,7 @@ const updateAdminBySuper = async (req, res, next) => {
   try {
     const { error } = updateBySuperAdminSchema.validate(req.body);
     if (error) {
-      return res
-        .status(400)
-        .json({ message: error?.details?.map((val) => val.message) });
+      return res.status(400).json({ message: error?.details?.map((val) => val.message) });
     }
 
     const updated = await updateAdminById(id, req.body);
@@ -41,7 +39,7 @@ const updateAdminBySuper = async (req, res, next) => {
       id: updated._id,
       name: updated.name,
       email: updated.email,
-      role: updated.role,
+      role: updated.role
     };
 
     res.status(200).json({ message: "Admin updated successfully", data: obj });
@@ -66,15 +64,11 @@ const updateAdminPassword = async (req, res, next) => {
   try {
     const { error } = updatePwdSchema.validate(req.body);
     if (error) {
-      return res
-        .status(400)
-        .json({ message: error?.details?.map((val) => val.message) });
+      return res.status(400).json({ message: error?.details?.map((val) => val.message) });
     }
     await changeAdminPasswordById(req);
 
-    res
-      .status(200)
-      .json({ message: "Password has been changed successfully." });
+    res.status(200).json({ message: "Password has been changed successfully." });
   } catch (error) {
     next(error);
   }
@@ -85,9 +79,7 @@ const updateAdminProfile = async (req, res, next) => {
   try {
     const { error } = updateProfileSchema.validate(req.body);
     if (error) {
-      return res
-        .status(400)
-        .json({ message: error?.details?.map((val) => val.message) });
+      return res.status(400).json({ message: error?.details?.map((val) => val.message) });
     }
 
     const updated = await updateAdminProfileById(req);
@@ -96,7 +88,7 @@ const updateAdminProfile = async (req, res, next) => {
       id: updated._id,
       name: updated.name,
       email: updated.email,
-      role: updated.role,
+      role: updated.role
     };
 
     res.status(200).json({ message: "Admin updated successfully.", data: obj });
@@ -110,5 +102,5 @@ module.exports = {
   updateAdminBySuper,
   deleteAdminBySuper,
   updateAdminPassword,
-  updateAdminProfile,
+  updateAdminProfile
 };

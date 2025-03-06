@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`); // unique file name
-  },
+  }
 });
 
 const filterFile = (req, file, cb) => {
@@ -22,16 +22,13 @@ const filterFile = (req, file, cb) => {
     "image/png",
     "image/jpg",
     "image/webp",
-    "application/pdf",
+    "application/pdf"
   ];
   if (allowedFileTypes.includes(file.mimetype)) {
     return cb(null, true);
   } else {
     return cb(
-      new CustomError(
-        "Invalid file type. Only PNG, JPEG, WEBP and PDF allowed",
-        400
-      ),
+      new CustomError("Invalid file type. Only PNG, JPEG, WEBP and PDF allowed", 400),
       false
     );
   }
@@ -42,7 +39,7 @@ const filterFile = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: filterFile,
-  limits: { fieldSize: 5 * 1024 * 1024 },
+  limits: { fieldSize: 5 * 1024 * 1024 }
 });
 
 module.exports = { upload, filterFile };

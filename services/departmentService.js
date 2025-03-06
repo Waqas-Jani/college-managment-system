@@ -14,13 +14,7 @@ const createDeparment = async (data) => {
 };
 
 // find departments with pagination and filter
-const findDepartments = async ({
-  limit,
-  page,
-  query,
-  populateOptions,
-  sortBy,
-}) => {
+const findDepartments = async ({ limit, page, query, populateOptions, sortBy }) => {
   const departments = await simplePagination(
     Department,
     Number(page),
@@ -49,11 +43,7 @@ const updateDepartmentById = async (id, data) => {
     }
   }
   // if name not change then bypass the if statement and find & update
-  const updated = await Department.findByIdAndUpdate(
-    id,
-    { $set: data },
-    { new: true }
-  );
+  const updated = await Department.findByIdAndUpdate(id, { $set: data }, { new: true });
   if (!updated) {
     throw new CustomError(`Record with ID ${id} not found. `, 404);
   }
@@ -73,5 +63,5 @@ module.exports = {
   createDeparment,
   findDepartments,
   updateDepartmentById,
-  deleteDepartmentById,
+  deleteDepartmentById
 };

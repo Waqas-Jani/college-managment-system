@@ -4,17 +4,12 @@ const jwt = require("jsonwebtoken");
 const verifySuperAdmin = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
-  if (!token)
-    return res
-      .status(401)
-      .json({ message: "Access denied due to unauthorized." });
+  if (!token) return res.status(401).json({ message: "Access denied due to unauthorized." });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     if (decoded.role !== "SuperAdmin") {
-      return res
-        .status(403)
-        .json({ message: "Forbidden: Only SuperAdmins allowed" });
+      return res.status(403).json({ message: "Forbidden: Only SuperAdmins allowed" });
     }
     next();
   } catch (error) {
@@ -26,9 +21,7 @@ const verifySuperAdmin = (req, res, next) => {
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    return res
-      .status(401)
-      .json({ message: "Access denied due to unauthorized." });
+    return res.status(401).json({ message: "Access denied due to unauthorized." });
   }
 
   try {
@@ -46,8 +39,7 @@ const allowedRoles = (...roles) => {
   return (req, res, next) => {
     if (!req.user || !roles.includes(req.user.role)) {
       return res.status(403).json({
-        message:
-          "Forbidden. You don't have permission to access this resource.",
+        message: "Forbidden. You don't have permission to access this resource."
       });
     }
     next();
@@ -57,5 +49,5 @@ const allowedRoles = (...roles) => {
 module.exports = {
   verifySuperAdmin,
   verifyToken,
-  allowedRoles,
+  allowedRoles
 };

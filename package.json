@@ -8,7 +8,13 @@
     "server": "nodemon server.js",
     "client": "cd client && npm start",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "prepare": "husky",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "test": "jest"
   },
   "author": "Waqas",
   "license": "MIT",
@@ -28,6 +34,33 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
+    "@eslint/js": "^9.21.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^9.21.0",
+    "eslint-config-prettier": "^10.0.2",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.3"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*.{json,md,css,scss}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "applypatch-msg": "echo \"[Husky] applypatch-msg\"",
+      "pre-applypatch": "echo \"[Husky] pre-applypatch\"",
+      "post-applypatch": "echo \"[Husky] post-applypatch\"",
+      "pre-commit": "lint-staged"
+    }
   }
 }

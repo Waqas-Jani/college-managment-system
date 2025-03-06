@@ -18,7 +18,7 @@ const createSuperAdmin = async () => {
       name: "Muhammad Waqas",
       email: "waqas@gmail.com",
       password: hash,
-      role: "SuperAdmin",
+      role: "SuperAdmin"
     });
 
     await superAdmin.save();

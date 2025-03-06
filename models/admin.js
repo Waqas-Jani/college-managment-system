@@ -7,7 +7,7 @@ const adminSchema = new mongoose.Schema({
   password: { type: String, minlength: 8, required: true },
   role: { type: String, enum: ["Admin", "SuperAdmin"], default: "Admin" }, // Admin roles
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
 });
 
 // // Hash password before saving

@@ -1,17 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const {
-  verifySuperAdmin,
-  verifyToken,
-  allowedRoles,
-} = require("../../middleware/auth");
+const { verifySuperAdmin, verifyToken, allowedRoles } = require("../../middleware/auth");
 const { registerAdmin, loginAdmin } = require("../../controllers/admin/auth");
 const {
   updateAdminBySuper,
   deleteAdminBySuper,
   updateAdminPassword,
   updateAdminProfile,
-  getAllAdmins,
+  getAllAdmins
 } = require("../../controllers/admin/adminController");
 
 // Register admin by super admin
@@ -38,11 +34,6 @@ router.put(
 );
 
 // Update admin profile
-router.put(
-  "/edit/:id",
-  verifyToken,
-  allowedRoles("SuperAdmin", "Admin"),
-  updateAdminProfile
-);
+router.put("/edit/:id", verifyToken, allowedRoles("SuperAdmin", "Admin"), updateAdminProfile);
 
 module.exports = router;

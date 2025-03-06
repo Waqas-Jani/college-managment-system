@@ -20,7 +20,7 @@ const createFaculty = async (data) => {
     role,
     updatedBy,
     departments,
-    courses,
+    courses
   });
   await newFaculty.save();
 
@@ -44,13 +44,7 @@ const facultyVerification = async (data) => {
 };
 
 // Find faculties with pagination and filter
-const findFaculties = async ({
-  limit,
-  page,
-  query,
-  populateOptions,
-  sortBy,
-}) => {
+const findFaculties = async ({ limit, page, query, populateOptions, sortBy }) => {
   let select = "-password";
   const faculties = await simplePagination(
     Faculty,
@@ -76,19 +70,12 @@ const updateFacultyByAdminById = async (id, data) => {
     if (data.email !== faculty.email) {
       const isEmailExist = await Faculty.findOne({ email: data.email });
       if (isEmailExist) {
-        throw new CustomError(
-          "Faculty member with this email already exists.",
-          409
-        );
+        throw new CustomError("Faculty member with this email already exists.", 409);
       }
     }
   }
   //   if email not change then bypass the if statement and find & update
-  const updated = await Faculty.findByIdAndUpdate(
-    id,
-    { $set: data },
-    { new: true }
-  );
+  const updated = await Faculty.findByIdAndUpdate(id, { $set: data }, { new: true });
   if (!updated) {
     throw new CustomError(`Record with ID ${id} not found. `, 404);
   }
@@ -110,8 +97,7 @@ const changeFacultyPasswordById = async (id, data) => {
   if (!faculty) throw new CustomError("User does not exist.", 404);
 
   const isMatch = await comparePassword(data?.old_password, faculty.password);
-  if (!isMatch)
-    throw new CustomError("Incorrect old password. Please try again!", 400);
+  if (!isMatch) throw new CustomError("Incorrect old password. Please try again!", 400);
 
   const hashPwd = await hashPassword(data.password);
 
@@ -120,11 +106,7 @@ const changeFacultyPasswordById = async (id, data) => {
 };
 
 const updateFacultyProfileById = async (id, { name }) => {
-  const updated = await Faculty.findByIdAndUpdate(
-    id,
-    { $set: { name } },
-    { new: true }
-  );
+  const updated = await Faculty.findByIdAndUpdate(id, { $set: { name } }, { new: true });
   if (!updated) {
     throw new CustomError(`Record with ID ${id} not found. `, 404);
   }
@@ -138,5 +120,5 @@ module.exports = {
   updateFacultyByAdminById,
   deleteFacultyById,
   changeFacultyPasswordById,
-  updateFacultyProfileById,
+  updateFacultyProfileById
 };

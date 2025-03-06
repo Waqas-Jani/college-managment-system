@@ -1,7 +1,4 @@
-const {
-  subjectSchema,
-  optionalSubjectSchema,
-} = require("../utils/validationsSchema");
+const { subjectSchema, optionalSubjectSchema } = require("../utils/validationsSchema");
 
 const {
   createSubject,
@@ -11,7 +8,7 @@ const {
   uploadFileById,
   removeFileById,
   uploadFileLocalById,
-  removedLocalSubjectFileById,
+  removedLocalSubjectFileById
 } = require("../services/subjectService");
 
 // get all department with pagination
@@ -38,7 +35,7 @@ const getSubjects = async (req, res, next) => {
       page,
       query,
       populateOptions,
-      sort_by,
+      sort_by
     });
     res.status(200).json(departments);
   } catch (error) {
@@ -52,16 +49,12 @@ const postSubject = async (req, res, next) => {
     const { error } = subjectSchema.validate(req.body);
 
     if (error) {
-      return res
-        .status(400)
-        .json({ message: error?.details?.map((val) => val.message) });
+      return res.status(400).json({ message: error?.details?.map((val) => val.message) });
     }
 
     const subject = await createSubject(req.body);
 
-    res
-      .status(201)
-      .json({ message: "Subject created successfully.", data: subject });
+    res.status(201).json({ message: "Subject created successfully.", data: subject });
   } catch (error) {
     next(error);
   }
@@ -73,14 +66,10 @@ const updateSubject = async (req, res, next) => {
   try {
     const { error } = optionalSubjectSchema.validate(req.body);
     if (error) {
-      return res
-        .status(400)
-        .json({ message: error?.details.map((val) => val.message) });
+      return res.status(400).json({ message: error?.details.map((val) => val.message) });
     }
     const updated = await updateSubjectById(id, req.body);
-    res
-      .status(200)
-      .json({ message: "Subject updated successfully.", data: updated });
+    res.status(200).json({ message: "Subject updated successfully.", data: updated });
   } catch (error) {
     next(error);
   }
@@ -110,9 +99,7 @@ const uploadSubjectFile = async (req, res, next) => {
     }
     const uploaded = await uploadFileById(id, file);
 
-    res
-      .status(200)
-      .json({ message: "Subject file uploaded successfully.", data: uploaded });
+    res.status(200).json({ message: "Subject file uploaded successfully.", data: uploaded });
   } catch (error) {
     next(error);
   }
@@ -139,9 +126,7 @@ const uploadLocalSubjectFile = async (req, res, next) => {
       return res.status(400).json({ message: "No file uploaded!" });
     }
     const uploaded = await uploadFileLocalById(id, file);
-    res
-      .status(200)
-      .json({ message: "Subject file uploaded successfully.", data: uploaded });
+    res.status(200).json({ message: "Subject file uploaded successfully.", data: uploaded });
   } catch (error) {
     next(error);
   }
@@ -166,5 +151,5 @@ module.exports = {
   uploadSubjectFile,
   removeSubjectFile,
   uploadLocalSubjectFile,
-  removeLocalSubjectFile,
+  removeLocalSubjectFile
 };

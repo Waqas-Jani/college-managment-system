@@ -1,13 +1,10 @@
-const {
-  courseSchema,
-  optionalCourseSchema,
-} = require("../utils/validationsSchema");
+const { courseSchema, optionalCourseSchema } = require("../utils/validationsSchema");
 
 const {
   createCourse,
   findCourses,
   updateCourseById,
-  deleteCourseById,
+  deleteCourseById
 } = require("../services/courseService");
 
 // get all courses with pagination
@@ -15,8 +12,7 @@ const getCourses = async (req, res, next) => {
   const { limit, page, name, u_ref, d_ref, f_ref, sort_by } = req.query;
   let populateOptions = [];
   let query = {};
-  if (u_ref)
-    populateOptions.push({ path: "updatedBy", select: "name role email" });
+  if (u_ref) populateOptions.push({ path: "updatedBy", select: "name role email" });
   if (d_ref) populateOptions.push({ path: "department", select: "name" });
   if (f_ref) populateOptions.push({ path: "faculty", select: "name email" });
 
@@ -30,7 +26,7 @@ const getCourses = async (req, res, next) => {
       page,
       query,
       populateOptions,
-      sort_by,
+      sort_by
     });
     res.status(200).json(courses);
   } catch (error) {
@@ -43,16 +39,12 @@ const postCourse = async (req, res, next) => {
   try {
     const { error } = courseSchema.validate(req.body);
     if (error) {
-      return res
-        .status(400)
-        .json({ message: error?.details?.map((val) => val.message) });
+      return res.status(400).json({ message: error?.details?.map((val) => val.message) });
     }
 
     const course = await createCourse(req.body);
 
-    res
-      .status(201)
-      .json({ message: "Course created successfully.", data: course });
+    res.status(201).json({ message: "Course created successfully.", data: course });
   } catch (error) {
     next(error);
   }
@@ -64,14 +56,10 @@ const updateCourse = async (req, res, next) => {
   try {
     const { error } = optionalCourseSchema.validate(req.body);
     if (error) {
-      return res
-        .status(400)
-        .json({ message: error?.details.map((val) => val.message) });
+      return res.status(400).json({ message: error?.details.map((val) => val.message) });
     }
     const updated = await updateCourseById(id, req.body);
-    res
-      .status(200)
-      .json({ message: "Department updated successfully.", data: updated });
+    res.status(200).json({ message: "Department updated successfully.", data: updated });
   } catch (error) {
     next(error);
   }

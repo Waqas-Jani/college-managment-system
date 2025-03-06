@@ -17,13 +17,7 @@ const createSubject = async (data) => {
 };
 
 // find subject with pagination and filter
-const findSubjects = async ({
-  limit,
-  page,
-  query,
-  populateOptions,
-  sortBy,
-}) => {
+const findSubjects = async ({ limit, page, query, populateOptions, sortBy }) => {
   const subjects = await simplePagination(
     Subject,
     Number(page),
@@ -54,11 +48,7 @@ const updateSubjectById = async (id, data) => {
     }
   }
   // if name not change then bypass the if statement and find & update
-  const updated = await Subject.findByIdAndUpdate(
-    id,
-    { $set: data },
-    { new: true }
-  );
+  const updated = await Subject.findByIdAndUpdate(id, { $set: data }, { new: true });
   if (!updated) {
     throw new CustomError(`Record with ID ${id} not found. `, 404);
   }
@@ -89,7 +79,7 @@ const uploadFileById = async (id, file) => {
       {
         folder: "college-managment",
         resource_type: resourceType,
-        format: resourceType === "raw" ? "pdf" : undefined,
+        format: resourceType === "raw" ? "pdf" : undefined
       },
       (error, result) => {
         if (error) {
@@ -131,9 +121,7 @@ const removeFileById = async (id) => {
             await subject.save();
             resolve("ok");
           } else {
-            return reject(
-              new CustomError(`File not found or already removed.`, 404)
-            );
+            return reject(new CustomError(`File not found or already removed.`, 404));
           }
         }
       );
@@ -184,5 +172,5 @@ module.exports = {
   uploadFileById,
   removeFileById,
   uploadFileLocalById,
-  removedLocalSubjectFileById,
+  removedLocalSubjectFileById
 };

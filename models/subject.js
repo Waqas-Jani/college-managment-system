@@ -6,12 +6,10 @@ const subjectSchema = new mongoose.Schema({
   creditHour: { type: String },
   fileUrl: { type: String },
   department: { type: mongoose.Schema.Types.ObjectId, ref: "Department" }, // Reference to the Department
-  attendanceRecords: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Attendance" },
-  ],
+  attendanceRecords: [{ type: mongoose.Schema.Types.ObjectId, ref: "Attendance" }],
   assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assignment" }],
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model("Subject", subjectSchema);

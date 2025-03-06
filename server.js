@@ -14,6 +14,7 @@ const depRoutes = require("./routes/v1/department");
 const courseRoutes = require("./routes/v1/course");
 const facultyRoutes = require("./routes/v1/faculty");
 const subjectRoutes = require("./routes/v1/subject");
+const studentRoutes = require("./routes/v1/student");
 
 const app = express();
 const server = http.createServer(app);
@@ -29,10 +30,7 @@ mongoose
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
@@ -57,6 +55,7 @@ app.use("/api/v1/department", depRoutes);
 app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/faculty", facultyRoutes);
 app.use("/api/v1/subject", subjectRoutes);
+app.use("/api/v1/student", studentRoutes);
 
 // Error handler
 

@@ -43,12 +43,12 @@ const adminVerification = async (data, next) => {
 // Generate JWT Token
 const generateToken = (data) => {
   return jwt.sign(data, process.env.JWT_SECRET_KEY, {
-    expiresIn: "2d",
+    expiresIn: "2d"
   });
 };
 
 module.exports = {
   createAdmin,
   adminVerification,
-  generateToken,
+  generateToken
 };

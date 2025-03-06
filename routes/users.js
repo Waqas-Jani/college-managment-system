@@ -10,19 +10,19 @@ const Joi = require("@hapi/joi");
 const RegisterSchema = Joi.object({
   reg_id: Joi.number().required(),
   class: Joi.string(),
-  is_admin: Joi.number().max(1).required(),
+  is_admin: Joi.number().max(1).required()
 });
 const updateSchema = Joi.object({
   reg_id: Joi.number().required(),
   name: Joi.string().required(),
   email: Joi.string().email({
     minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
+    tlds: { allow: ["com", "net"] }
   }),
   password: Joi.string()
     .required()
     .pattern(/^[a-zA-Z0-9]{3,30}$/),
-  is_admin: Joi.number().max(1).required(),
+  is_admin: Joi.number().max(1).required()
 });
 // Register User
 router.post("/register", async (req, res) => {
@@ -34,12 +34,12 @@ router.post("/register", async (req, res) => {
       if (err) {
         res.status(500).json({
           status: 500,
-          message: "Something went wrong",
+          message: "Something went wrong"
         });
       } else if (reg) {
         res.status(422).json({
           status: 422,
-          message: "Duplicate Registration not allow",
+          message: "Duplicate Registration not allow"
         });
       } else {
         var newUser = new User({
@@ -49,16 +49,16 @@ router.post("/register", async (req, res) => {
           password: "",
           class: {
             id: obj.classId,
-            name: obj.name,
+            name: obj.name
           },
-          is_admin: value.is_admin,
+          is_admin: value.is_admin
         });
         await User.createUser(newUser, function (err, user) {
           if (err) throw err;
           res.status(200).json({
             status: 200,
             message: "Student registration created successfully",
-            data: user,
+            data: user
           });
         });
       }
@@ -67,7 +67,7 @@ router.post("/register", async (req, res) => {
     res.status(400).json({
       status: 400,
       message: err.details[0].message,
-      detail: "Invalid parameters",
+      detail: "Invalid parameters"
     });
   }
 });
@@ -76,83 +76,76 @@ router.put("/register", async (req, res) => {
   // validate the request data against the schema
   try {
     const value = await updateSchema.validateAsync(req.body);
-    await User.findOne(
-      { reg_id: value.reg_id, registered: false },
-      async (err, reg) => {
-        if (err) {
-          res.status(500).json({
-            status: 500,
-            message: "Something went wrong",
-          });
-        } else if (reg) {
-          await User.findOne({ email: value.email }, async (err, email) => {
-            if (email) {
-              res.status(422).json({
-                status: 422,
-                message: "Duplicate email not allow",
+    await User.findOne({ reg_id: value.reg_id, registered: false }, async (err, reg) => {
+      if (err) {
+        res.status(500).json({
+          status: 500,
+          message: "Something went wrong"
+        });
+      } else if (reg) {
+        await User.findOne({ email: value.email }, async (err, email) => {
+          if (email) {
+            res.status(422).json({
+              status: 422,
+              message: "Duplicate email not allow"
+            });
+          } else {
+            const saltRounds = 10;
+            const salt = await bcrypt.genSaltSync(saltRounds);
+            const hash = await bcrypt.hashSync(value.password, salt);
+            var std = {
+              reg_id: value.reg_id,
+              name: value.name,
+              email: value.email,
+              password: hash,
+              registered: true,
+              is_admin: value.is_admin
+            };
+            let query = { reg_id: value.reg_id };
+            await User.updateOne(query, std, function (err, user) {
+              if (err) throw err;
+              res.status(200).json({
+                status: 200,
+                message: "Student created successfully",
+                data: user
               });
-            } else {
-              const saltRounds = 10;
-              const salt = await bcrypt.genSaltSync(saltRounds);
-              const hash = await bcrypt.hashSync(value.password, salt);
-              var std = {
-                reg_id: value.reg_id,
-                name: value.name,
-                email: value.email,
-                password: hash,
-                registered: true,
-                is_admin: value.is_admin,
-              };
-              let query = { reg_id: value.reg_id };
-              await User.updateOne(query, std, function (err, user) {
-                if (err) throw err;
-                res.status(200).json({
-                  status: 200,
-                  message: "Student created successfully",
-                  data: user,
-                });
-              });
-            }
-          });
-        } else {
-          res.status(422).json({
-            status: 422,
-            message: "Invalid Registration #",
-          });
-        }
+            });
+          }
+        });
+      } else {
+        res.status(422).json({
+          status: 422,
+          message: "Invalid Registration #"
+        });
       }
-    );
+    });
   } catch (err) {
     res.status(400).json({
       status: 400,
       message: err.details[0].message,
-      detail: "Invalid parameters",
+      detail: "Invalid parameters"
     });
   }
 });
 // Login
-router.post(
-  "/login",
-  passport.authenticate("local", { failureFlash: true }),
-  function (req, res) {
-    if (req.body.is_admin === req.user.is_admin) {
-      res.status(200).json(req.user);
-    } else {
-      req.logout();
-      res.sendStatus(401);
-    }
+router.post("/login", passport.authenticate("local", { failureFlash: true }), function (req, res) {
+  if (req.body.is_admin === req.user.is_admin) {
+    res.status(200).json(req.user);
+  } else {
+    req.logout();
+    res.sendStatus(401);
   }
-);
+});
 // Logout
 router.get("/logout", function (req, res) {
   if (req.user) {
     req.logout();
     res.status(200).json({
-      message: "Success",
+      message: "Success"
     });
   } else {
     res.status(401).json({
-      message: "User does not exist",
+      message: "User does not exist"
     });
   }
 });
@@ -160,11 +153,11 @@ router.get("/logout", function (req, res) {
 router.get("/check", (req, res) => {
   if (req.user) {
     res.status(200).json({
-      user: true,
+      user: true
     });
   } else {
     res.status(401).json({
-      user: false,
+      user: false
     });
   }
 });
@@ -184,12 +177,12 @@ router.delete("/delete/:id", function (req, res) {
     .exec()
     .then((result) => {
       res.status(200).json({
-        message: "User Deleted",
+        message: "User Deleted"
       });
     })
     .catch((err) => {
       res.status(500).json({
-        err,
+        err
       });
     });
 });
@@ -213,21 +206,17 @@ function userPagination(model) {
     if (endIndex < (await model.countDocuments().exec())) {
       results.next = {
         page: page + 1,
-        limit: limit,
+        limit: limit
       };
     }
     if (startIndex > 0) {
       results.previous = {
         page: page - 1,
-        limit: limit,
+        limit: limit
       };
     }
     try {
-      results.results = await model
-        .find({ is_admin: 0 })
-        .limit(limit)
-        .skip(startIndex)
-        .exec();
+      results.results = await model.find({ is_admin: 0 }).limit(limit).skip(startIndex).exec();
       res.paginatedResults = results;
       next();
     } catch (e) {

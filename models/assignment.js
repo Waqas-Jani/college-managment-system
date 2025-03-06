@@ -6,12 +6,12 @@ const assignmentSchema = new mongoose.Schema({
   subject: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Subject",
-    required: true,
+    required: true
   },
   faculty: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Faculty",
-    required: true,
+    required: true
   },
   class: { type: mongoose.Schema.Types.ObjectId, ref: "Class", required: true },
   dueDate: { type: Date, required: true },
@@ -23,11 +23,11 @@ const assignmentSchema = new mongoose.Schema({
       submittedAt: { type: Date, default: Date.now },
       fileUrl: { type: String, required: true }, // Link to submitted file
       marksObtained: { type: Number, default: null },
-      feedback: { type: String, default: "" },
-    },
+      feedback: { type: String, default: "" }
+    }
   ],
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }, // Timestamp
+  updatedAt: { type: Date, default: Date.now } // Timestamp
 });
 
 module.exports = mongoose.model("Assignment", assignmentSchema);

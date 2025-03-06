@@ -25,11 +25,7 @@ const updateAdminById = async (id, data) => {
   }
   //   if email not change then bypass the if statement and find & update
 
-  const updated = await Admin.findByIdAndUpdate(
-    id,
-    { $set: data },
-    { new: true }
-  );
+  const updated = await Admin.findByIdAndUpdate(id, { $set: data }, { new: true });
   if (!updated) {
     throw new CustomError(`Record with ID ${id} not found. `, 404);
   }
@@ -58,8 +54,7 @@ const changeAdminPasswordById = async (req) => {
   if (!admin) throw new CustomError("User does not exist", 404);
 
   const isMatch = await comparePassword(old_password, admin.password);
-  if (!isMatch)
-    throw new CustomError("Incorrect old password. Please try again!", 400);
+  if (!isMatch) throw new CustomError("Incorrect old password. Please try again!", 400);
 
   const hashPwd = await hashPassword(password);
 
@@ -72,11 +67,7 @@ const updateAdminProfileById = async (req) => {
   const { id } = req.params;
   const { name } = req.body;
 
-  const updated = await Admin.findByIdAndUpdate(
-    id,
-    { $set: { name } },
-    { new: true }
-  );
+  const updated = await Admin.findByIdAndUpdate(id, { $set: { name } }, { new: true });
   if (!updated) {
     throw new CustomError(`Record with ID ${id} not found. `, 404);
   }
@@ -88,5 +79,5 @@ module.exports = {
   updateAdminById,
   deleteAdminById,
   changeAdminPasswordById,
-  updateAdminProfileById,
+  updateAdminProfileById
 };

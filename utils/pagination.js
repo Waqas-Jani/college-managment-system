@@ -20,12 +20,7 @@ const simplePagination = async (
 
     const totalDocuments = await model.countDocuments(query);
 
-    let queryBuilder = model
-      .find(query)
-      .skip(offset)
-      .sort(sort)
-      .limit(limit)
-      .lean();
+    let queryBuilder = model.find(query).skip(offset).sort(sort).limit(limit).lean();
 
     // Apply population if required
     if (populateOptions.length > 0) {
@@ -43,14 +38,14 @@ const simplePagination = async (
     if (!limit && !page) {
       return {
         total_records: totalDocuments,
-        results,
+        results
       };
     }
     return {
       total_pages: Math.ceil(totalDocuments / limit),
       current_page: page,
       total_records: totalDocuments,
-      results,
+      results
     };
   } catch (error) {
     throw new CustomError(error.message, 400);
@@ -70,9 +65,7 @@ const cursorPagination = async (
     limit = parseInt(limit) || 10;
 
     // Build query for cursor-based pagination
-    const paginationQuery = cursor
-      ? { ...query, [sortField]: { $gt: cursor } }
-      : query;
+    const paginationQuery = cursor ? { ...query, [sortField]: { $gt: cursor } } : query;
 
     // Fetch data with population
     let queryExec = model
@@ -82,18 +75,14 @@ const cursorPagination = async (
 
     // Apply population if fields are provided
     if (populateFields.length > 0) {
-      populateFields.forEach(
-        (field) => (queryExec = queryExec.populate(field))
-      );
+      populateFields.forEach((field) => (queryExec = queryExec.populate(field)));
     }
 
     // Execute query
     const results = await queryExec;
 
     // Get the next cursor (last item's sortField)
-    const nextCursor = results.length
-      ? results[results.length - 1][sortField]
-      : null;
+    const nextCursor = results.length ? results[results.length - 1][sortField] : null;
 
     return { results, nextCursor };
   } catch (error) {

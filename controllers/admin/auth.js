@@ -2,7 +2,7 @@ const { registerSchema, loginSchema } = require("../../utils/validationsSchema")
 const {
   createAdmin,
   adminVerification,
-  generateToken,
+  generateToken
 } = require("../../services/adminAuthService");
 
 // Register Admin by Super Admin
@@ -10,9 +10,7 @@ const registerAdmin = async (req, res, next) => {
   try {
     const { error } = registerSchema.validate(req.body);
     if (error) {
-      return res
-        .status(400)
-        .json({ message: error?.details?.map((val) => val.message) });
+      return res.status(400).json({ message: error?.details?.map((val) => val.message) });
     }
 
     const newAdmin = await createAdmin(req.body, next);
@@ -21,12 +19,10 @@ const registerAdmin = async (req, res, next) => {
       id: newAdmin?._id,
       name: newAdmin?.name,
       email: newAdmin?.email,
-      role: newAdmin?.role,
+      role: newAdmin?.role
     };
 
-    res
-      .status(201)
-      .json({ message: "Admin registered successfully", data: obj });
+    res.status(201).json({ message: "Admin registered successfully", data: obj });
   } catch (error) {
     next(error);
   }
@@ -37,16 +33,14 @@ const loginAdmin = async (req, res, next) => {
   try {
     const { error } = loginSchema.validate(req.body);
     if (error) {
-      return res
-        .status(400)
-        .json({ message: error?.details?.map((val) => val.message) });
+      return res.status(400).json({ message: error?.details?.map((val) => val.message) });
     }
 
     const admin = await adminVerification(req.body, next);
     const token = generateToken({
       id: admin._id,
       role: admin.role,
-      email: admin.email,
+      email: admin.email
     });
 
     res.json({ token, role: admin.role });

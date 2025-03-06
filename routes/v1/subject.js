@@ -9,7 +9,7 @@ const {
   uploadSubjectFile,
   removeSubjectFile,
   uploadLocalSubjectFile,
-  removeLocalSubjectFile,
+  removeLocalSubjectFile
 } = require("../../controllers/subjectController");
 const { upload } = require("../../middleware/uploadLocal");
 const { uploadMemory } = require("../../middleware/uploadCloud");
@@ -18,28 +18,13 @@ const { uploadMemory } = require("../../middleware/uploadCloud");
 router.post("/", verifyToken, allowedRoles("SuperAdmin", "Admin"), postSubject);
 
 // Get subjects by Super & Admin with pagination and filters
-router.get(
-  "/all",
-  verifyToken,
-  allowedRoles("SuperAdmin", "Admin"),
-  getSubjects
-);
+router.get("/all", verifyToken, allowedRoles("SuperAdmin", "Admin"), getSubjects);
 
 // Update subject by Super & Admin
-router.put(
-  "/edit/:id",
-  verifyToken,
-  allowedRoles("SuperAdmin", "Admin"),
-  updateSubject
-);
+router.put("/edit/:id", verifyToken, allowedRoles("SuperAdmin", "Admin"), updateSubject);
 
 // Delete subject by Super & Admin
-router.delete(
-  "/:id",
-  verifyToken,
-  allowedRoles("SuperAdmin", "Admin"),
-  deleteSubject
-);
+router.delete("/:id", verifyToken, allowedRoles("SuperAdmin", "Admin"), deleteSubject);
 
 // upload subject file on cloud server by Super & Admin
 router.put(

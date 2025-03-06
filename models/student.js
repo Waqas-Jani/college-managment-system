@@ -15,12 +15,12 @@ const studentSchema = new mongoose.Schema({
       title: String,
       message: String,
       read: { type: Boolean, default: false },
-      createdAt: { type: Date, default: Date.now },
-    },
+      createdAt: { type: Date, default: Date.now }
+    }
   ],
   assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assignment" }],
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model("Student", studentSchema);
