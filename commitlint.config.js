@@ -18,6 +18,6 @@ module.exports = {
         "revert" // revert: revert changes
       ]
     ],
-    "subject-case": [2, "always", "sentence-case"]
+    "subject-case": [2, "never", "sentence-case"]
   }
 };
